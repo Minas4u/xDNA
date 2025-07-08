@@ -1,0 +1,11 @@
+{
+  "name": "Distance Association",
+  "short_name": "DNA",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0284c7",
+  "description": "For Runners.",
+  "icons": []
+}

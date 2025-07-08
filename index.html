@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0284c7">
+    <title>project: Marathon</title>
+    <link rel="manifest" href="manifest.json">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="min-h-screen p-4 py-8"> 
+    <div id="login-container" class="main-container"> <!-- Existing: max-width: 64rem; -->
+        <!-- This will become a flex container for two columns on md+ screens -->
+        <div id="login-layout-wrapper" class="md:flex md:gap-8 lg:gap-12">
+
+            <!-- Left Column: Existing Login Form -->
+            <div id="login-form-column" class="md:w-1/2 lg:w-2/5 xl:w-1/3 md:flex-shrink-0">
+                <header class="mb-8 text-center">
+                    <div class="logo-title-container">
+                        <img src="assets/pictures/DNALOGO.png" alt="DNA Logo" class="image-logo-dna"> <!-- mx-auto removed, mt-2 removed from h1 -->
+                        <h1 class="text-3xl sm:text-4xl main-title text-stone-800">
+                            <span class="title-project" id="mainTitleProject">project:</span> <span class="title-marathon" id="mainTitleMarathon">Marathon</span>
+                        </h1>
+                    </div>
+                </header>
+                <div class="space-y-4">
+                    <button id="installPwaButton" class="w-full flex justify-center py-2 px-4 border-transparent rounded-md shadow-sm text-sm font-medium hidden mb-4">
+                        Install App
+                    </button>
+                    <div>
+                        <label for="userIdInput" class="block text-sm font-medium text-stone-700 mb-1">User ID:</label>
+                        <input type="text" id="userIdInput" name="userIdInput" class="mt-1 block w-full px-3 py-2 shadow-sm sm:text-sm" placeholder="Enter your User ID">
+                    </div>
+                    <!-- #loginButtonWrapper and #loginButton are here -->
+                    <div id="loginButtonWrapper" style="position: relative;">
+                        <button id="loginButton" class="w-full flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
+                            Enter the Run
+                        </button>
+                        <div class="runner" id="runner1"></div>
+                        <div class="runner" id="runner2"></div>
+                        <div class="runner" id="runner3"></div>
+                    </div>
+                    <div id="login-loading-message" class="hidden text-center text-sky-600">
+                        <svg class="animate-spin h-5 w-5 text-sky-600 mx-auto mb-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Running...
+                    </div>
+                    <div id="login-error-message" class="hidden"></div>
+                </div>
+            </div>
+
+            <!-- Right Column: New Scrolling Names List -->
+            <div id="runners-scroll-widget" class="hidden md:block md:w-1/2 lg:w-3/5 xl:w-2/3 md:pl-4 lg:pl-8">
+                <!-- Content for this will be styled and animated with CSS -->
+                <h3 class="text-xl font-semibold text-stone-700 mb-4 text-center md:text-left">Marathon Greats</h3>
+                <div id="runners-scroll-container">
+                    <ul id="runners-list">
+                        <!-- JS will populate this -->
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="main-app-wrapper" class="main-container hidden">
+        <header class="mb-8 text-center"> 
+            <div class="logo-title-container">
+                <img src="assets/pictures/DNALOGO.png" alt="DNA Logo" class="image-logo-dna"> <!-- mx-auto removed, mt-2 removed from h1 -->
+                <h1 class="text-3xl sm:text-4xl main-title text-stone-800">
+                    <span class="title-project" id="appHeaderTitleProject">project:</span> <span class="title-marathon" id="appHeaderTitleMarathon">Marathon</span>
+                </h1>
+            </div>
+            <p class="text-stone-600 mt-2 text-lg" id="appSubtitle"> 
+                Your interactive guide to marathon training.
+            </p>
+            <button id="darkModeToggle" class="absolute top-4 right-4 p-2 rounded-full text-stone-600 hover:text-sky-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+            </button>
+        </header>
+
+        <nav class="mb-8 flex flex-wrap justify-center gap-2 sm:gap-4 pb-4 custom-rect-border-nav">
+            <button id="nav-overview" class="nav-button active-overview">Plan Overview</button>
+            <button id="nav-plan" class="nav-button">Training Plan</button>
+            <button id="nav-companion" class="nav-button">Companion</button> 
+            <button id="nav-calendar" class="nav-button">Calendar</button>
+            <button id="nav-race" class="nav-button">Race</button> 
+            <button id="nav-info" class="nav-button">Info</button> 
+        </nav>
+
+        <main id="app-content">
+            <div id="loading-message">
+                <svg class="animate-spin h-8 w-8 text-sky-600 mx-auto mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Loading training plan data from Google Sheet...
+            </div>
+            <div id="error-message" class="hidden"></div>
+        </main>
+    </div>
+    <div id="print-section-container" class="hidden"></div>
+
+    <div id="mileage-chart-modal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50">
+        <div class="bg-white p-4 rounded-lg shadow-xl relative w-full max-w-3xl">
+            <button id="closeMileageChartBtn" class="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-3xl leading-none">&times;</button>
+            <h2 id="mileage-chart-modal-title" class="text-xl sm:text-2xl font-semibold text-sky-700 mb-3">Overall Mileage Progression</h2>
+            <div class="chart-container" style="height: 40vh;">
+                <canvas id="mileageChartModalCanvas"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Team Updates Modal -->
+    <div id="updates-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-[60]">
+        <div class="updates-modal-content-wrapper">
+             <button id="close-updates-modal-btn">&times;</button>
+             <div id="updates-modal-content">
+                <!-- Content will be injected by JS -->
+             </div>
+        </div>
+    </div>
+<script src="script.js" defer></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(registration => {
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        })
+        .catch(error => {
+          console.log('ServiceWorker registration failed: ', error);
+        });
+    });
+  }
+</script>
+</body>
+</html>
